@@ -1,0 +1,29 @@
+# CRC (colorectal) x Virchow2
+#
+# Cancer type -> HEST-bench task code mapping (see HEST README results table):
+#   CRC (colorectal) spans colon + rectum:
+#     COAD = colon adenocarcinoma
+#     READ = rectum adenocarcinoma
+#   Both are listed below; the benchmark reports one Pearson score per task code.
+#   Drop READ if you only want the colon task.
+#
+# Paths are NOT set here — they come from configs/paths.yaml (edit once per machine).
+
+task: CRC
+datasets: [COAD, READ]
+encoders: [virchow2]
+
+# ---- Patch extraction (Trident) ----
+target_magnification: 20
+patch_size: 256
+overlap: 0
+
+# ---- Linear probing / evaluation (HEST BenchmarkConfig fields) ----
+gene_list: var_50genes.json
+method: ridge
+normalize: true
+dimreduce: PCA
+latent_dim: 256
+batch_size: 128
+num_workers: 1
+seed: 1

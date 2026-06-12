@@ -1,0 +1,26 @@
+# BRCA (breast) x Virchow2
+#
+# Cancer type -> HEST-bench task code mapping (see HEST README results table):
+#   BRCA (breast invasive ductal carcinoma) -> IDC
+#   (LYMPH_IDC is the lymph-node-metastatic breast task; add it here if desired.)
+#
+# Paths are NOT set here — they come from configs/paths.yaml (edit once per machine).
+
+task: BRCA
+datasets: [IDC]
+encoders: [virchow2]     # Trident patch-encoder registry name.
+
+# ---- Patch extraction (Trident) ----
+target_magnification: 20
+patch_size: 256
+overlap: 0
+
+# ---- Linear probing / evaluation (HEST BenchmarkConfig fields) ----
+gene_list: var_50genes.json
+method: ridge
+normalize: true
+dimreduce: PCA
+latent_dim: 256
+batch_size: 128
+num_workers: 1
+seed: 1

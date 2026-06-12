@@ -1,0 +1,25 @@
+# LUAD (lung adenocarcinoma) x CONCH
+#
+# Cancer type -> HEST-bench task code mapping (see HEST README results table):
+#   LUAD (lung adenocarcinoma) -> LUNG
+#
+# Paths are NOT set here — they come from configs/paths.yaml (edit once per machine).
+
+task: LUAD
+datasets: [LUNG]
+encoders: [conch_v1]     # CONCH v1; use `conch_v15` for CONCH v1.5.
+
+# ---- Patch extraction (Trident) ----
+target_magnification: 20
+patch_size: 256
+overlap: 0
+
+# ---- Linear probing / evaluation (HEST BenchmarkConfig fields) ----
+gene_list: var_50genes.json
+method: ridge
+normalize: true
+dimreduce: PCA
+latent_dim: 256
+batch_size: 128
+num_workers: 1
+seed: 1

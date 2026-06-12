@@ -1,0 +1,17 @@
+# Central path configuration.
+#
+# This is the ONE place to edit when moving between machines. Task configs
+# (brca_conch.yaml, etc.) deliberately contain NO absolute paths — they inherit
+# everything here. scripts/run_benchmark.py loads this file and expands any
+# ${VAR} references using the current environment (see .env / .env.example).
+#
+# Mapping to HEST's BenchmarkConfig fields:
+#   bench_data_root -> root holding the per-task HEST-bench data
+#                      (patches, *.h5ad expression, splits/, var_50genes.json).
+#                      Auto-downloaded from HF dataset MahmoodLab/hest-bench.
+#   embed_dataroot  -> where extracted patch embeddings are cached.
+#   results_dir     -> where prediction results / metrics are written.
+
+bench_data_root: ${DATA_DIR}/hest-bench
+embed_dataroot: ${RESULTS_DIR}/ST_data_emb
+results_dir: ${RESULTS_DIR}/ST_pred_results

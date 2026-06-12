@@ -1,0 +1,74 @@
+# Conda environment for the HEST-Benchmark reproduction project.
+#
+# Creates an env able to install HEST + Trident + SEAL (as editable packages via
+# scripts/setup_env.sh). Python is pinned to 3.11 because that is the only version
+# satisfying all three repos simultaneously:
+#   - HEST     requires-python >= 3.11
+#   - Trident  requires-python >= 3.10, < 3.12
+#   - SEAL     requires-python >= 3.11, < 3.12
+#
+# ----------------------------------------------------------------------------
+# GPU / CUDA NOTE (read before installing on the GPU Linux machine):
+#   The `torch` / `torchvision` lines below install the CPU build by default so
+#   this env can be created on a Mac (no GPU) just to scaffold the project.
+#   On the GPU machine, install the CUDA build instead, e.g.:
+#       pip install torch==2.1.2 torchvision==0.16.2 \
+#           --index-url https://download.pytorch.org/whl/cu121
+#   SEAL additionally pulls RAPIDS GPU packages on Linux (cudf/cucim/cuml/cupy,
+#   CUDA 12.x). Those are Linux+GPU only and are installed by `uv sync` /
+#   setup_env.sh on the GPU box — do NOT try to install them on Mac.
+#   The HEST benchmark uses `ridge-gpu` (cuML) when available and falls back to
+#   sklearn `ridge` on CPU, so the eval logic itself does not require a GPU.
+# ----------------------------------------------------------------------------
+
+name: hest-repro
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.11
+  - pip
+
+  # ---- System libraries that are painful to install via pip ----
+  # Whole-slide image IO (Trident / HEST) and geometry stack (geopandas/shapely).
+  - openslide
+  - libvips
+  - pyvips
+  - gdal
+  - geos
+  - proj
+
+  # ---- Python packages installed with pip ----
+  - pip:
+      # PyTorch — CPU build by default (see GPU note above to swap for CUDA).
+      - torch
+      - torchvision
+
+      # Lightweight scientific stack used by the ridge/Pearson evaluation.
+      # This subset is enough to run scripts/run_benchmark.py --synthetic on a Mac.
+      - numpy
+      - scipy
+      - scikit-learn
+      - pandas
+      - pyyaml
+      - tqdm
+      - h5py
+      - scanpy
+      - loguru
+
+      # Hugging Face access (check_hf_access.py, weight downloads).
+      - huggingface_hub
+      - "huggingface_hub[cli]"
+
+      # Dev / testing.
+      - pytest
+
+      # ---- The three core repos (installed editable by setup_env.sh) ----
+      # They are intentionally NOT listed here so that `conda env create` does
+      # not try to build them on a machine without GPU/system deps. Run
+      #   bash scripts/setup_env.sh
+      # after the env is created to install them from third_party/ as:
+      #   pip install -e third_party/trident[patch-encoders]
+      #   pip install -e third_party/HEST[benchmark]
+      #   pip install -e third_party/SEAL

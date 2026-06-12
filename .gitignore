@@ -1,0 +1,52 @@
+# ---- Cloned source repos (read-only reference, not part of this project) ----
+third_party/
+
+# ---- Secrets / local environment ----
+.env
+*.env
+!.env.example
+
+# ---- Model weights & checkpoints ----
+weights/
+*.pth
+*.pt
+*.bin
+*.safetensors
+*.ckpt
+
+# ---- Data & benchmark artifacts ----
+# Anchored to repo root so these don't accidentally match source dirs
+# like src/eval/.
+/data/
+/eval/
+/results/
+/ST_data_emb/
+/ST_pred_results/
+*.h5
+*.h5ad
+*.pkl
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# ---- Test / tooling caches ----
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---- OS / editor ----
+.DS_Store
+*.swp
+.idea/
+.vscode/

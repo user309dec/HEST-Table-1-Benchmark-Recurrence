@@ -1,0 +1,28 @@
+# BRCA (breast) x CONCH
+#
+# Cancer type -> HEST-bench task code mapping (see HEST README results table):
+#   BRCA (breast invasive ductal carcinoma) -> IDC
+#   (LYMPH_IDC is the lymph-node-metastatic breast task; add it here if desired.)
+#
+# Paths are NOT set here — they come from configs/paths.yaml (edit once per machine).
+
+task: BRCA
+datasets: [IDC]          # HEST-bench task code(s) for this cancer type
+encoders: [conch_v1]     # Trident patch-encoder registry name.
+                         # CONCH v1 = the "CONCH" entry in the original Table 1.
+                         # Use `conch_v15` for the newer CONCH v1.5 variant.
+
+# ---- Patch extraction (Trident) ----
+target_magnification: 20
+patch_size: 256
+overlap: 0
+
+# ---- Linear probing / evaluation (HEST BenchmarkConfig fields) ----
+gene_list: var_50genes.json   # top-50 highly variable genes, shipped per task
+method: ridge                 # sklearn Ridge on CPU; "ridge-gpu" (cuML) on GPU box
+normalize: true               # per-spot total-count + log1p (sc.pp.log1p)
+dimreduce: PCA                # PCA before ridge for fair cross-encoder comparison
+latent_dim: 256               # PCA components
+batch_size: 128
+num_workers: 1
+seed: 1
