@@ -1,8 +1,8 @@
 # Day 1–2 — Pathology AI review
 
 > Two-week plan, block 1. The detailed task description lives in the mentor's
-> `HEST_Benchmark_Task_Summary.md` (not included in this session — paste the
-> relevant section here when you have it).
+> `HEST_Benchmark_Task_Summary.md` (in the repo root) — see its section 三
+> "技术背景 / Patch Feature Extractor" for the reading goals of this block.
 
 ## Goal
 Background reading on computational pathology and pathology foundation models,

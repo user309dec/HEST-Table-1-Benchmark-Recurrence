@@ -4,7 +4,8 @@ Two-week plan checklist for reproducing HEST-Benchmark Table 1
 (CONCH & Virchow2 on BRCA / CRC / LUAD) + SEAL bonus.
 
 > The detailed task description is in the mentor's `HEST_Benchmark_Task_Summary.md`
-> (not present in this session — add it to the repo and link relevant sections).
+> (in the repo root) — see it for the full background, evaluation pseudocode,
+> two-week plan, and gotchas.
 
 ## Two-week plan
 - [ ] **Day 1–2** — Pathology AI review → `notes/day1-2_pathology_ai_review.md`
