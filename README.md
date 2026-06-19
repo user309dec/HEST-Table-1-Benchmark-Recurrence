@@ -122,7 +122,7 @@ from your environment), so switching machines only means editing `.env`.
 - `python scripts/check_hf_access.py` — runs and reports per-repo access.
 - Config loading with env-var path expansion.
 
-**Scaffolded, runs on the GPU machine only** (needs CUDA, the editable installs,
+**runs on the GPU machine only** (needs CUDA, the editable installs,
 and gated HF access): `scripts/extract_features.py`, the real-mode
 `scripts/run_benchmark.py --config ...`, and the SEAL `--custom-encoder` path.
 
@@ -136,18 +136,3 @@ and gated HF access): `scripts/extract_features.py`, the real-mode
 3. Smoke-test one task: `python scripts/run_benchmark.py --config configs/brca_conch.yaml`
    (HEST auto-downloads the bench data on first run), confirm a Pearson number
    comes out, then fan out to the other 5 configs.
-
-## Caveats / decisions to confirm with the mentor
-- The mentor's `HEST_Benchmark_Task_Summary.md` (repo root) has been
-  cross-checked against this scaffold: cancer types (BRCA/CRC/LUAD), encoders
-  (CONCH + Virchow2), top-50 HVGs, 256px @ 20x, Ridge + Pearson, and the SEAL
-  bonus all match. Note its section 八 reference magnitudes (CONCH BRCA
-  ~0.20–0.28) are rough; the HEST README snapshot used in `notes/day10-11_*`
-  reports higher numbers (BRCA/IDC CONCH 0.5363) — confirm which to compare
-  against.
-- "CONCH" defaults to Trident's **`conch_v1`** (the original Table 1 entry);
-  `conch_v15` is also wired in if v1.5 is intended.
-- CRC configs include **both COAD and READ**; trim to one if the mentor wants a
-  single colorectal task.
-- Patching uses **256px @ 20x** (per the setup prompt / Trident defaults); the
-  official HEST data is tiled at 112µm @ 0.5µm/px.
