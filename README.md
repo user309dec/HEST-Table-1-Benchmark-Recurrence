@@ -115,24 +115,38 @@ pytest tests/
 Paths come from `configs/paths.yaml` (which reads `${DATA_DIR}` / `${RESULTS_DIR}`
 from your environment), so switching machines only means editing `.env`.
 
-## Current status (built on a no-GPU Mac)
+## Current status
 **Verified to run on CPU here:**
 - `pytest tests/` — 10 tests pass (ridge/Pearson math + SEAL encoder interface).
 - `python scripts/run_benchmark.py --synthetic` — full ridge eval on synthetic data.
 - `python scripts/check_hf_access.py` — runs and reports per-repo access.
 - Config loading with env-var path expansion.
 
-**runs on the GPU machine only** (needs CUDA, the editable installs,
-and gated HF access): `scripts/extract_features.py`, the real-mode
+**runs on the GPU machine only**: `scripts/extract_features.py`, the real-mode
 `scripts/run_benchmark.py --config ...`, and the SEAL `--custom-encoder` path.
 
-### First things to do on the GPU machine
-1. `git clone` this repo, re-clone the three upstream repos into `third_party/`
-   (they are git-ignored), then `bash scripts/setup_env.sh` with the CUDA torch
-   build installed first.
-2. `cp .env.example .env`, fill in `HF_TOKEN` / `DATA_DIR` / `RESULTS_DIR`, then
-   run `python scripts/check_hf_access.py` until **all repos show OK** (request
-   gated access for CONCH, Virchow2, SEAL, hest-bench if needed).
-3. Smoke-test one task: `python scripts/run_benchmark.py --config configs/brca_conch.yaml`
-   (HEST auto-downloads the bench data on first run), confirm a Pearson number
-   comes out, then fan out to the other 5 configs.
+## Results 
+| Task | conch_v1 | virchow2 |
+|------|----------|----------|
+| BRCA / IDC | **0.5363** | **0.5971** |
+| CRC (COAD/READ avg) | **0.2044** (COAD .249 / READ .160) | **0.2326** (COAD .258 / READ .207) |
+| LUAD / LUNG | **0.5323** | **0.5685** |
+
+Virchow2 > CONCH on every task (as in the paper). BRCA/IDC conch_v1 = 0.5363 matches the HEST README value exactly.
+
+### SEAL bonus (CONCH SEAL)
+| Task | CONCH | CONCH-SEAL | Δ | Virchow2 |
+|------|-------|------------|---|----------|
+| BRCA / IDC | 0.5363 | **0.5484** | **+0.012** | 0.5971 |
+| CRC (avg)  | 0.2044 | **0.2245** | **+0.020** | 0.2326 |
+| LUAD / LUNG | 0.5323 | **0.5349** | **+0.003** | 0.5685 |
+
+CONCH-SEAL (LoRA-fine-tuned CONCH ViT-B/16) beats vanilla CONCH on every task —
+SEAL's ST-molecular fine-tuning helps, largest gain on CRC. Still below the much
+larger Virchow2 ViT-H.
+
+How it was made to run despite SEAL pinning transformers 4.48 + timm 1.0.9 (conflicts with the main stack's 4.40.2 / 0.9.16):
+- Did NOT install SEAL's full deps. Added only minimal vision-path extras: `peft==0.11.1`, `accelerate==0.30.1` (`--no-deps`), and `setuptools<81` (restores `pkg_resources`). Kept `huggingface_hub` at 0.36.2 (<1.0, required by transformers 4.40.2; also ships the `hf` CLI SEAL needs).
+- Ran the benchmark with **CWD = `third_party/SEAL`** (so SEAL's relative `conf/config.yaml` + `weights/` resolve) and **`.venv/bin` on PATH** (so SEAL's `shutil.which('hf')` download path works). Checkpoints `seal_conch_{vision,omics}.pth` auto-download to `weights/conch_SEAL/`. The CONCH-SEAL vision encoder is a LoRA-adapted CONCH ViT-B/16.
+- Helper: `logs/_run_seal3.sh`.
+
