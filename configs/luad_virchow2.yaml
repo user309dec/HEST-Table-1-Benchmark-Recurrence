@@ -20,6 +20,6 @@ method: ridge
 normalize: true
 dimreduce: PCA
 latent_dim: 256
-batch_size: 128
+batch_size: 8            # lowered from 128: Virchow2 is ViT-H; fits the 12GB RTX 4080
 num_workers: 1
 seed: 1

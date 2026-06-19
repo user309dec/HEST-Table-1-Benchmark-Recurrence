@@ -26,6 +26,9 @@ weights/
 *.h5ad
 *.pkl
 
+# ---- Run logs & local helper scripts (runtime artifacts) ----
+logs/
+
 # ---- Python ----
 __pycache__/
 *.py[cod]
