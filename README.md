@@ -141,8 +141,8 @@ Virchow2 > CONCH on every task (as in the paper). BRCA/IDC conch_v1 = 0.5363 mat
 | CRC (avg)  | 0.2044 | **0.2245** | **+0.020** | 0.2326 |
 | LUAD / LUNG | 0.5323 | **0.5349** | **+0.003** | 0.5685 |
 
-CONCH-SEAL (LoRA-fine-tuned CONCH ViT-B/16) beats vanilla CONCH on every task —
-SEAL's ST-molecular fine-tuning helps, largest gain on CRC. Still below the much
+CONCH-SEAL (LoRA-fine-tuned CONCH ViT-B/16) beats vanilla CONCH on every task.
+SEAL's ST-molecular fine-tuning helps, with the largest gain on CRC. Still below the much
 larger Virchow2 ViT-H.
 
 How it was made to run despite SEAL pinning transformers 4.48 + timm 1.0.9 (conflicts with the main stack's 4.40.2 / 0.9.16):
