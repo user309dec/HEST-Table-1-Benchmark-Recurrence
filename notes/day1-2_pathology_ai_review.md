@@ -2,7 +2,7 @@
 
 > Block 1 of the two-week plan. Reading goal (mentor §3): understand what the patch encoders in this project actually do. Facts below were web-verified on 2026-06-18 against the primary sources cited at the bottom.
 
-## 1. What is Computational Pathology?
+## 1. What is Computational Pathology doing?
 
 Pathology = diagnosing disease by looking at stained tissue under a microscope;
 it is the **gold standard** for cancer diagnosis. Computational pathology
