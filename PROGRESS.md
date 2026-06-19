@@ -17,7 +17,7 @@ Two-week plan checklist for reproducing HEST-Benchmark Table 1
 - [x] **Day 12** — Comparison with paper → `notes/day12_comparison.md` filled with real numbers
 - [x] **Day 13–14** — SEAL bonus (CONCH-SEAL) → `notes/day13-14_seal_bonus.md` filled; CONCH-SEAL = 0.5484
 
-## Scaffold status (this session, no-GPU Mac)
+## status (Mac)
 Done and verified to run on CPU:
 - [x] Cloned HEST / Trident / SEAL into `third_party/` (read-only reference).
 - [x] Project skeleton (configs / src / scripts / tests / notes).
@@ -30,7 +30,7 @@ Done and verified to run on CPU:
 - [x] `scripts/check_hf_access.py` — runs; reports per-repo access (needs token+network).
 - [x] `.gitignore` / `.env.example`.
 
-Scaffolded, NOT yet run (needs GPU machine + gated access):
+NOT yet run:
 - [x] Env built on RTX 4080 (12GB) via `uv` venv (py3.11), torch 2.1.2+cu121, numpy<2, transformers 4.40.2.
 - [x] Editable installs of trident[patch-encoders] + HEST (SEAL deferred — bonus).
 - [x] `scripts/check_hf_access.py` — **6/6 repos OK**.
@@ -39,7 +39,7 @@ Scaffolded, NOT yet run (needs GPU machine + gated access):
 - [x] CRC / LUAD tasks — all ran (luad_conch needed a rerun after an hf_hub version clash).
 - [x] SEAL `--custom-encoder conch_seal` end-to-end — **ran on all 3 tasks** (see notes).
 
-## Results (real benchmark, RTX 4080) — main task complete
+## Results 
 | Task | conch_v1 | virchow2 |
 |------|----------|----------|
 | BRCA / IDC | **0.5363** | **0.5971** |
@@ -48,7 +48,7 @@ Scaffolded, NOT yet run (needs GPU machine + gated access):
 
 Virchow2 > CONCH on every task (as in the paper). BRCA/IDC conch_v1 = 0.5363 matches the HEST README value exactly.
 
-### SEAL bonus — DONE (CONCH-SEAL on all 3 tasks)
+### SEAL bonus (CONCH SEAL)
 | Task | CONCH | CONCH-SEAL | Δ | Virchow2 |
 |------|-------|------------|---|----------|
 | BRCA / IDC | 0.5363 | **0.5484** | **+0.012** | 0.5971 |
@@ -63,6 +63,3 @@ How it was made to run despite SEAL pinning transformers 4.48 + timm 1.0.9 (conf
 - Did NOT install SEAL's full deps. Added only minimal vision-path extras: `peft==0.11.1`, `accelerate==0.30.1` (`--no-deps`), and `setuptools<81` (restores `pkg_resources`). Kept `huggingface_hub` at 0.36.2 (<1.0, required by transformers 4.40.2; also ships the `hf` CLI SEAL needs).
 - Ran the benchmark with **CWD = `third_party/SEAL`** (so SEAL's relative `conf/config.yaml` + `weights/` resolve) and **`.venv/bin` on PATH** (so SEAL's `shutil.which('hf')` download path works). Checkpoints `seal_conch_{vision,omics}.pth` auto-download to `weights/conch_SEAL/`. The CONCH-SEAL vision encoder is a LoRA-adapted CONCH ViT-B/16.
 - Helper: `logs/_run_seal3.sh`.
-
-## First thing to do on the GPU machine
-See the "Current status / GPU next steps" section of `README.md`.
